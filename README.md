@@ -6,12 +6,12 @@ This project contains everything needed to build, test and deploy Sidewinder Lab
 Vagrant
 =======
 
-First, [install Chef, VirtualBox and Vagrant](chef-repo/wiki).
+First, [install Chef, VirtualBox and Vagrant](vagrant-scripts/wiki).
 
-To launch a VM that contains a local Drupal server, navigate to the `vagrant` directory and run:
+To launch a VM that contains a local ElasticSearch server, navigate to the `vagrant` directory and run:
 
 ```
-vagrant up ui_server
+vagrant up es_server
 ```
 
 The first time this is run it will take some time, since Vagrant needs to download a base instance of Debian (what they call a 'box'). Once this has been downloaded it will be kept for future use when building new VMs.
@@ -19,27 +19,22 @@ The first time this is run it will take some time, since Vagrant needs to downlo
 Once the entire process has completed, it will be possible to connect to the VM using SSH. To do this use the Vagrant `ssh` command:
 
 ```
-vagrant ssh ui_server
+vagrant ssh es_server
 ```
   
-To connect to the web-site that was created use the following IP address and port number:
+To connect to the end-point that was created use the following IP address and port number:
 
 ```
-33.33.33.10:8888
+33.33.33.12:9200
 ```
 
 The VM can be suspended using:
 
 ```
-vagrant suspend ui_server
+vagrant suspend es_server
 ```
 
 See the [Vagrant commands](http://vagrantup.com/docs/commands.html) reference for more on what you can do with the VM.
-
-Database interaction
-====================
-
-The live scripts are configured to get the Drupal instances talking to an RDS database. For development purposes we'll probably want to create our own local copies of the database, but to get this running quickly I've taken a snapshot of the live database, deployed it on a new RDS instance, and then updated the Vagrant scripts to set Drupal to point to this database. It has the advantage that any database changes you make whilst developing will not affect the live site, but it's still not ideal -- the solution is to factor out the database creation code that I have in the Chef scripts to separate scripts that can be run when appropriate.
 
 Deploying different versions of the code
 ========================================
@@ -59,6 +54,8 @@ vagrant reload ui_server
 ```
 
 See the [Vagrant commands](http://vagrantup.com/docs/commands.html) reference for the difference between these two commands.
+
+The remaining document is the standard Chef documentation.
 
 Chef Repositories
 =================
