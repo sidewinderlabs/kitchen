@@ -1,0 +1,54 @@
+{
+  "attributes": {
+  },
+  "conflicting": {
+  },
+  "recipes": {
+    "misc": "Installs and configures the Sidewinder Labs Platform"
+  },
+  "providing": {
+  },
+  "description": "Installs/Configures the Sidewinder Labs Platform",
+  "maintainer": "Sidewinder Labs Ltd.",
+  "replacing": {
+  },
+  "platforms": {
+    "debian": [
+
+    ],
+    "centos": [
+
+    ],
+    "ubuntu": [
+
+    ]
+  },
+  "maintainer_email": "mark.birbeck@sidewinderlabs.com",
+  "version": "0.1.0",
+  "groupings": {
+  },
+  "recommendations": {
+  },
+  "dependencies": {
+    "mysql": [
+
+    ],
+    "php": [
+
+    ],
+    "openssl": [
+
+    ],
+    "python": [
+
+    ],
+    "apache2": [
+
+    ]
+  },
+  "name": "misc",
+  "suggestions": {
+  },
+  "license": "Apache 2.0",
+  "long_description": "= DESCRIPTION:\n\n= REQUIREMENTS:\n\n= ATTRIBUTES:\n\n= USAGE:\n\n"
+}
