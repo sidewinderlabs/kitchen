@@ -46,6 +46,7 @@ Vagrant::Config.run do |config|
 	  vm.cpu_count = 2
 	end
     es_server.vm.network("33.33.33.12")
+    es_server.vm.forward_port("ES", 9200, 9200)
   end
 
   config.vm.define :hadoop_client do |hadoop_client_config|
