@@ -54,6 +54,10 @@ cookbook_file "/usr/local/elasticsearch/config/elasticsearch.yml" do
   source "elasticsearch.yml"
 end
 
+execute "Install Thrift plug-in" do
+  command "/usr/local/elasticsearch/bin/plugin -install transport-thrift"
+end
+
 execute "Create ES service" do
   command "update-rc.d elasticsearchd defaults"
 end
