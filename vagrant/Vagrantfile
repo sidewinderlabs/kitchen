@@ -8,7 +8,7 @@ Vagrant::Config.run do |config|
 
   # The url from where the 'config.vm.box' box will be fetched if it
   # doesn't already exist on the user's system.
-  config.vm.box_url = "http://files.vagrantup.com/lucid64.box"
+  config.vm.box_url = "http://files.vagrantup.com/lucid32.box"
 
   # Boot with a GUI so you can see the screen. (Default is headless)
   # config.vm.boot_mode = :gui
@@ -41,7 +41,9 @@ Vagrant::Config.run do |config|
       chef.add_role("es-server")
     end
 	es_server.vm.customize do |vm|
+	  vm.name = "ElasticSearch server"
 	  vm.memory_size = 2048
+	  vm.cpu_count = 2
 	end
     es_server.vm.network("33.33.33.12")
   end
