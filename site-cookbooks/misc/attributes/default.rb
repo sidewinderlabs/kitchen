@@ -2,4 +2,4 @@
 
 # ElasticSearch configuration
 #
-default[:elasticsearch][:version] = "0.18.2"
+set[:elasticsearch][:version] = "0.18.4"

@@ -21,25 +21,25 @@
 node[:java][:install_flavor] = "sun"
 
 require_recipe "java"
-
-remote_file "/opt/elasticsearch-0.18.2.tar.gz" do
-  source "https://github.com/downloads/elasticsearch/elasticsearch/elasticsearch-0.18.2.tar.gz"
+  
+remote_file "/opt/elasticsearch-#{node[:elasticsearch][:version]}.tar.gz" do
+  source "https://github.com/downloads/elasticsearch/elasticsearch/elasticsearch-#{node[:elasticsearch][:version]}.tar.gz"
   mode "0644"
   backup false
-  not_if { File.directory?("/opt/elasticsearch-0.18.2")}
+  not_if { File.directory?("/opt/elasticsearch-#{node[:elasticsearch][:version]}")}
 end
 
 execute "unpack ES" do
   cwd "/opt"
-  command "tar -xzvf elasticsearch-0.18.2.tar.gz"
-  not_if { File.directory?("/opt/elasticsearch-0.18.2")}
+  command "tar -xzvf elasticsearch-#{node[:elasticsearch][:version]}.tar.gz"
+  not_if { File.directory?("/opt/elasticsearch-#{node[:elasticsearch][:version]}")}
 end
 
 link "/usr/local/elasticsearch" do
-  to "/opt/elasticsearch-0.18.2"
+  to "/opt/elasticsearch-#{node[:elasticsearch][:version]}"
 end
 
-file "/opt/elasticsearch-0.18.2.tar.gz" do
+file "/opt/elasticsearch-#{node[:elasticsearch][:version]}.tar.gz" do
   action :delete
 end
 
