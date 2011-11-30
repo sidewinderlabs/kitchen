@@ -58,6 +58,14 @@ execute "Install Thrift plug-in" do
   command "/usr/local/elasticsearch/bin/plugin -install transport-thrift"
 end
 
+execute "Install Web front-end plug-in" do
+  command "/usr/local/elasticsearch/bin/plugin -install mobz/elasticsearch-head"
+end
+
+execute "Install BigDesk plug-in" do
+  command "/usr/local/elasticsearch/bin/plugin -install lukas-vlcek/bigdesk"
+end
+
 execute "Create ES service" do
   command "update-rc.d elasticsearchd defaults"
 end
