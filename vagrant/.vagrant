@@ -1,1 +1,6 @@
-{"active":{"es_server":"da740946-c170-4d6c-ae38-77cf1c1be60f"}}
+{
+  "active": {
+    "es_server": "da740946-c170-4d6c-ae38-77cf1c1be60f",
+    "hadoop_client": "31c1a009-f1b0-4acc-8200-1f33b95a0e3b"
+  }
+}
