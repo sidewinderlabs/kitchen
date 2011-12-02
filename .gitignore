@@ -1,3 +1,4 @@
 .rake_test_cache
 s3cfg.erb
 *.pyc
+vagrant/.vagrant
