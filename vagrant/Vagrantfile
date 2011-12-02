@@ -39,6 +39,27 @@ Vagrant::Config.run do |config|
       chef.add_recipe("apt")
       chef.add_recipe("git")
       chef.add_role("es-server")
+
+      # Temporary addition of required cookbooks for EC2, since
+      # recipes used by roles are not automatically calculated:
+      #
+      chef.add_recipe("java")
+      chef.add_recipe("misc")
+
+      #this prints out the vagrant config to a `dna.json` file that we
+      #can upload to an EC2 instance and use with `chef-solo`.
+      require 'json'
+      Dir::mkdir('es_server') if not File::directory?('es_server')
+      open('es_server/dna.json', 'w') do |f|
+        chef.json[:run_list] = chef.run_list
+        f.write chef.json.to_json
+      end
+      open('es_server/cookbooks_path.json', 'w') do |f|
+        f.puts JSON.generate([chef.cookbooks_path].flatten)
+      end
+      open('es_server/roles_path.json', 'w') do |f|
+        f.puts JSON.generate([chef.roles_path].flatten)
+      end
     end
 	es_server.vm.customize do |vm|
 	  vm.name = "ElasticSearch server"
@@ -47,6 +68,44 @@ Vagrant::Config.run do |config|
 	end
     es_server.vm.network("33.33.33.12")
     es_server.vm.forward_port("ES", 9200, 9200)
+  end
+
+  config.vm.define :solr_server do |solr_server|
+    solr_server.vm.provision :chef_solo do |chef|
+      chef.cookbooks_path = ["../cookbooks", "../site-cookbooks"]
+      chef.roles_path = "../roles"
+      chef.add_recipe("apt")
+      chef.add_recipe("git")
+      chef.add_role("solr-server")
+
+      # Temporary addition of required cookbooks for EC2, since
+      # recipes used by roles are not automatically calculated:
+      #
+      chef.add_recipe("java")
+      chef.add_recipe("misc")
+
+      #this prints out the vagrant config to a `dna.json` file that we
+      #can upload to an EC2 instance and use with `chef-solo`.
+      require 'json'
+      Dir::mkdir('solr_server') if not File::directory?('solr_server')
+      open('solr_server/dna.json', 'w') do |f|
+        chef.json[:run_list] = chef.run_list
+        f.write chef.json.to_json
+      end
+      open('solr_server/cookbooks_path.json', 'w') do |f|
+        f.puts JSON.generate([chef.cookbooks_path].flatten)
+      end
+      open('solr_server/roles_path.json', 'w') do |f|
+        f.puts JSON.generate([chef.roles_path].flatten)
+      end
+    end
+	solr_server.vm.customize do |vm|
+	  vm.name = "Solr server"
+	  vm.memory_size = 2048
+	  vm.cpu_count = 2
+	end
+    solr_server.vm.network("33.33.33.13")
+    solr_server.vm.forward_port("Solr", 8983, 8983)
   end
 
   config.vm.define :hadoop_client do |hadoop_client_config|
@@ -68,6 +127,27 @@ Vagrant::Config.run do |config|
           :aws_secret_access_key => ENV['AWS_SECRET_ACCESS_KEY']
         }
       })
+
+      # Temporary addition of required cookbooks for EC2, since
+      # recipes used by roles are not automatically calculated:
+      #
+      chef.add_recipe("java")
+      chef.add_recipe("misc")
+
+      #this prints out the vagrant config to a `dna.json` file that we
+      #can upload to an EC2 instance and use with `chef-solo`.
+      require 'json'
+      Dir::mkdir('hadoop_client') if not File::directory?('hadoop_client')
+      open('hadoop_client/dna.json', 'w') do |f|
+        chef.json[:run_list] = chef.run_list
+        f.write chef.json.to_json
+      end
+      open('hadoop_client/cookbooks_path.json', 'w') do |f|
+        f.puts JSON.generate([chef.cookbooks_path].flatten)
+      end
+      open('hadoop_client/roles_path.json', 'w') do |f|
+        f.puts JSON.generate([chef.roles_path].flatten)
+      end
     end
   end
 
