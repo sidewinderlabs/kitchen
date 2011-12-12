@@ -1,0 +1,4 @@
+JETTY_HOME=<%= @node[:service][:solr][:install] %>/products
+JETTY_LOGS=<%= @node[:service][:solr][:logs] %>
+JETTY_ARGS="-Dsolr.solr.home=${JETTY_HOME}/solr <%= @node[:service][:solr][:jetty_config] %>"
+JETTY_USER=root
