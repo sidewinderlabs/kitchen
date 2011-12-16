@@ -1,7 +1,7 @@
 #
 # Author:: Mark Birbeck (mark.birbeck@sidewinderlabs.com)
 # Cookbook Name:: misc
-# Recipe:: django
+# Recipe:: ssh
 #
 # Copyright 2011, Sidewinder Labs Ltd.
 #
@@ -18,11 +18,22 @@
 # limitations under the License.
 #
 
-include_recipe "apache2::mod_wsgi"
+include_recipe "misc::keygen"
 
-include_recipe "python"
+# Ensure that the .ssh directory exists for root:
+#
+directory "/root/.ssh" do
+  owner "root"
+  group "root"
+  mode "0755"
+  action :create
+end
 
-python_pip "django" do
-  version "1.3.1"
-  action :install
+# Copy the default config file:
+#
+template "/root/.ssh/config" do
+  source "ssh-config.erb"
+  owner "root"
+  group "root"
+  mode "0700"
 end

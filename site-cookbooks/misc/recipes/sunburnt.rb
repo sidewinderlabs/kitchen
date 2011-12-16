@@ -1,7 +1,7 @@
 #
 # Author:: Mark Birbeck (mark.birbeck@sidewinderlabs.com)
 # Cookbook Name:: misc
-# Recipe:: django
+# Recipe:: sunburnt
 #
 # Copyright 2011, Sidewinder Labs Ltd.
 #
@@ -18,11 +18,14 @@
 # limitations under the License.
 #
 
-include_recipe "apache2::mod_wsgi"
+include_recipe "misc::lxml"
 
-include_recipe "python"
+python_pip "httplib2" do
+  version "0.7.2"
+  action :install
+end
 
-python_pip "django" do
-  version "1.3.1"
+python_pip "sunburnt" do
+  version "0.5"
   action :install
 end

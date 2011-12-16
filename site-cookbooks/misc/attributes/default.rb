@@ -5,6 +5,15 @@
 #
 set[:elasticsearch][:version] = "0.18.5"
 
+# P Y T H O N
+# ===========
+#
+# The latest version that we can get via package installers is 2.6, so
+# we need to install from source (the cookbook already has the version
+# set to 2.7.1 so no need to specify it here):
+#
+set['python']['install_method'] = 'source'
+
 # S O L R
 # =======
 #
@@ -15,8 +24,9 @@ set[:service][:solr][:download_url_x] = "http://mirrors.enquira.co.uk/apache//lu
 
 # For version 4.x:
 #
-set[:service][:solr][:version] = "4.0-2011-12-12_09-14-13"
-set[:service][:solr][:download_url] = "https://builds.apache.org/job/Solr-trunk/lastStableBuild/artifact/artifacts/apache-solr-#{node[:service][:solr][:version]}.tgz"
+set[:service][:solr][:build] = "1702"
+set[:service][:solr][:version] = "4.0-2011-12-13_09-19-12"
+set[:service][:solr][:download_url] = "https://builds.apache.org/job/Solr-trunk/#{node[:service][:solr][:build]}/artifact/artifacts/apache-solr-#{node[:service][:solr][:version]}.tgz"
 
 # General Solr configuration:
 #
@@ -29,4 +39,4 @@ set[:service][:solr][:logs] = "/var/logs/#{node[:service][:solr][:name]}"
 # J E T T Y
 # =========
 #
-set[:service][:solr][:jetty_vm_config] = "-XX:+UseConcMarkSweepGC -Xmx1536m"
+set[:service][:solr][:jetty_vm_config] = "-XX:+UseConcMarkSweepGC -Xmx4096m"

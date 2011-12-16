@@ -1,7 +1,7 @@
 #
 # Author:: Mark Birbeck (mark.birbeck@sidewinderlabs.com)
 # Cookbook Name:: misc
-# Recipe:: django
+# Recipe:: data-api
 #
 # Copyright 2011, Sidewinder Labs Ltd.
 #
@@ -18,11 +18,17 @@
 # limitations under the License.
 #
 
-include_recipe "apache2::mod_wsgi"
+include_recipe "misc::django"
+include_recipe "misc::pyes"
+include_recipe "misc::sunburnt"
 
-include_recipe "python"
+if node[:instance_role] != "vagrant"
+  include_recipe "misc::ssh"
 
-python_pip "django" do
-  version "1.3.1"
-  action :install
+  git "/opt/data-api" do
+    repository "git@github.com:EDITD/elasticsearch.git"
+    reference "master"
+    revision "c462afd99d634cf6b4722c22e3cd76f7a1fb7789"
+    action :sync
+  end
 end

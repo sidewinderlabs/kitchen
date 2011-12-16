@@ -1,7 +1,7 @@
 #
 # Author:: Mark Birbeck (mark.birbeck@sidewinderlabs.com)
 # Cookbook Name:: misc
-# Recipe:: django
+# Recipe:: lxml
 #
 # Copyright 2011, Sidewinder Labs Ltd.
 #
@@ -18,11 +18,22 @@
 # limitations under the License.
 #
 
-include_recipe "apache2::mod_wsgi"
+# Fail on non-Ubuntu platforms to ensure that the correct names are
+# inserted here:
+#
+pkgs = value_for_platform(
+  ["debian","ubuntu"] => {
+    "default" => ["libxml2-dev", "libxslt1-dev"]
+  }
+)
 
-include_recipe "python"
+pkgs.each do |pkg|
+  package pkg do
+    action :install
+  end
+end
 
-python_pip "django" do
-  version "1.3.1"
+python_pip "lxml" do
+  version "2.3.2"
   action :install
 end
