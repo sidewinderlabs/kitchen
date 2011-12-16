@@ -146,6 +146,7 @@ Vagrant::Config.run do |config|
 	end
     s.vm.network("33.33.33.14")
     s.vm.forward_port("Solr", 8983, 8983)
+    s.vm.forward_port("ES", 9200, 9200)
 
     # Mimic the 'data-api' recipe:
     #
