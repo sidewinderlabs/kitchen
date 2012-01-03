@@ -21,11 +21,24 @@
 node[:java][:install_flavor] = "sun"
 
 require_recipe "java"
+
+cookbook_file "/etc/init.d/elasticsearchd" do
+  source "es.init"
+  owner "root"
+  group "root"
+  mode "0700"
+end
+
+service "elasticsearchd" do
+  supports :status => true, :restart => true
+  action :enable
+end
   
 remote_file "/opt/elasticsearch-#{node[:elasticsearch][:version]}.tar.gz" do
   source "https://github.com/downloads/elasticsearch/elasticsearch/elasticsearch-#{node[:elasticsearch][:version]}.tar.gz"
   mode "0644"
   backup false
+  notifies :restart, resources(:service => "elasticsearchd")
   not_if { File.directory?("/opt/elasticsearch-#{node[:elasticsearch][:version]}")}
 end
 
@@ -43,22 +56,17 @@ file "/opt/elasticsearch-#{node[:elasticsearch][:version]}.tar.gz" do
   action :delete
 end
 
-cookbook_file "/etc/init.d/elasticsearchd" do
-  source "es.init"
-  owner "root"
-  group "root"
-  mode "0700"
-end
-
 cookbook_file "/etc/security/limits.conf" do
   source "security-limits.conf"
   owner "root"
   group "root"
   mode "0600"
+  notifies :restart, resources(:service => "elasticsearchd")
 end
 
 cookbook_file "/usr/local/elasticsearch/config/elasticsearch.yml" do
   source "elasticsearch.yml"
+  notifies :restart, resources(:service => "elasticsearchd")
 end
 
 execute "Install Thrift plug-in" do
@@ -71,12 +79,4 @@ end
 
 execute "Install BigDesk plug-in" do
   command "/usr/local/elasticsearch/bin/plugin -install lukas-vlcek/bigdesk"
-end
-
-execute "Create ES service" do
-  command "update-rc.d elasticsearchd defaults"
-end
-
-service "elasticsearchd" do
-  action :start
 end

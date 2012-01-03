@@ -3,7 +3,7 @@
 # E L A S T I C S E A R C H
 # =========================
 #
-set[:elasticsearch][:version] = "0.18.5"
+set[:elasticsearch][:version] = "0.18.6"
 
 # P Y T H O N
 # ===========
