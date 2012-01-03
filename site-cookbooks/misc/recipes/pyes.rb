@@ -18,6 +18,6 @@
 # limitations under the License.
 #
 
-python_pip "git+git://github.com/sidewinderlabs/pyes.git@ff24bf595bd27b2d186ded02bd7bd7d278214e3a" do
+python_pip "git+git://github.com/sidewinderlabs/pyes.git@e4d4c7b81ac9b6c2d0c57e981be3ffc5c1b727d8" do
   action :upgrade
 end
