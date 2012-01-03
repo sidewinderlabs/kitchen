@@ -50,6 +50,13 @@ cookbook_file "/etc/init.d/elasticsearchd" do
   mode "0700"
 end
 
+cookbook_file "/etc/security/limits.conf" do
+  source "security-limits.conf"
+  owner "root"
+  group "root"
+  mode "0600"
+end
+
 cookbook_file "/usr/local/elasticsearch/config/elasticsearch.yml" do
   source "elasticsearch.yml"
 end
