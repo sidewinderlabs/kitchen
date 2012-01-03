@@ -36,6 +36,23 @@ vagrant suspend es_server
 
 See the [Vagrant commands](http://vagrantup.com/docs/commands.html) reference for more on what you can do with the VM.
 
+Deploying to a remote server
+============================
+
+If the server was not launched with the bootstap script then bootstrap it as follows (this only needs to be done once):
+
+```
+cd vagrant
+scp ../vagrant-ec2/bootstrap.sh <your-server>:
+ssh <your-server> "sudo ~/bootstrap.sh"
+```
+
+Now the server can be updated with:
+
+```
+../vagrant-ec2/setup.sh <your-server> data_server
+```
+
 Deploying different versions of the code
 ========================================
 
