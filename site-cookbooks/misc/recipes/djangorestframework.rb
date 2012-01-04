@@ -1,7 +1,7 @@
 #
 # Author:: Mark Birbeck (mark.birbeck@sidewinderlabs.com)
 # Cookbook Name:: misc
-# Recipe:: data-api
+# Recipe:: djangorestframework
 #
 # Copyright 2011, Sidewinder Labs Ltd.
 #
@@ -18,18 +18,7 @@
 # limitations under the License.
 #
 
-include_recipe "misc::django"
-include_recipe "misc::pyes"
-include_recipe "misc::sunburnt"
-include_recipe "misc::djangorestframework"
-
-if node[:instance_role] != "vagrant"
-  include_recipe "misc::ssh"
-
-  git "/opt/data-api" do
-    repository "git@github.com:EDITD/dataservice.git"
-    reference "master"
-    revision "96eaf7339d3c488e5c2b9eb220fe2cdf6f6cbae0"
-    action :sync
-  end
+python_pip "djangorestframework" do
+  version "0.2.4"
+  action :install
 end
