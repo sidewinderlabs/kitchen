@@ -1,9 +1,8 @@
 #
-# Author:: Mark Birbeck (mark.birbeck@sidewinderlabs.com)
-# Cookbook Name:: misc
-# Recipe:: pyes
+# Cookbook Name:: subversion
+# Attributes:: server
 #
-# Copyright 2011, Sidewinder Labs Ltd.
+# Copyright 2009, Daniel DeLeo
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -18,6 +17,9 @@
 # limitations under the License.
 #
 
-python_pip "git+git://github.com/sidewinderlabs/pyes.git@e4d4c7b81ac9b6c2d0c57e981be3ffc5c1b727d8#egg=pyes" do
-  action :install
-end
+subversion Mash.new unless attribute?("subversion")
+default.subversion.repo_dir     "/srv/svn"
+default.subversion.repo_name    "repo"
+default.subversion.server_name  "svn"         # hostname of apache virtual host
+default.subversion.user         "subversion"
+default.subversion.password     "subversion"  # please override this :)

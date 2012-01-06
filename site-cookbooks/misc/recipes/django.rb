@@ -22,7 +22,15 @@ include_recipe "apache2::mod_wsgi"
 
 include_recipe "python"
 
-python_pip "django" do
-  version "1.3.1"
-  action :install
+if node[:instance_role] == "vagrant"
+  include_recipe "subversion"
+
+  python_pip "svn+http://code.djangoproject.com/svn/django/trunk/#egg=django" do
+    action :upgrade
+  end
+else
+  python_pip "django" do
+    version "1.3.1"
+    action :upgrade
+  end
 end

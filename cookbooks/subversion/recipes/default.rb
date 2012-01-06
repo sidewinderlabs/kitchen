@@ -1,16 +1,16 @@
 #
-# Author:: Mark Birbeck (mark.birbeck@sidewinderlabs.com)
-# Cookbook Name:: misc
-# Recipe:: pyes
+# Cookbook Name:: subversion
+# Recipe:: default
 #
-# Copyright 2011, Sidewinder Labs Ltd.
+# Copyright 2008-2009, Opscode, Inc.
+# Copyright 2009, Daniel DeLeo
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
-# 
-#     http://www.apache.org/licenses/LICENSE-2.0
-# 
+#
+#     http://www.apache.org/licenses/LICENSE-2.0c
+#
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -18,6 +18,4 @@
 # limitations under the License.
 #
 
-python_pip "git+git://github.com/sidewinderlabs/pyes.git@e4d4c7b81ac9b6c2d0c57e981be3ffc5c1b727d8#egg=pyes" do
-  action :install
-end
+include_recipe "subversion::client"

@@ -20,7 +20,7 @@
 
 include_recipe "misc::django"
 include_recipe "misc::pyes"
-include_recipe "misc::sunburnt"
+include_recipe "misc::requests"
 include_recipe "misc::djangorestframework"
 
 if node[:instance_role] != "vagrant"
