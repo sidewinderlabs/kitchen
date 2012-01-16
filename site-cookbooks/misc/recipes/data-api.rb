@@ -23,6 +23,11 @@ include_recipe "misc::pyes"
 include_recipe "misc::requests"
 include_recipe "misc::djangorestframework"
 
+python_pip "python-dateutil" do
+  version "1.5"
+  action :install
+end
+
 if node[:instance_role] != "vagrant"
   include_recipe "misc::ssh"
 
