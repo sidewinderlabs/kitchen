@@ -18,8 +18,6 @@
 # limitations under the License.
 #
 
-include_recipe "apache2::mod_wsgi"
-
 include_recipe "python"
 
 if node[:instance_role] == "vagrant"

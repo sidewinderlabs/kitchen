@@ -119,7 +119,6 @@ Vagrant::Config.run do |config|
       # Temporary addition of required cookbooks for EC2, since
       # recipes used by roles are not automatically calculated:
       #
-      chef.add_recipe("apache2::mod_wsgi")
       chef.add_recipe("java")
       chef.add_recipe("python")
       chef.add_recipe("misc")
