@@ -28,7 +28,11 @@ python_pip "python-dateutil" do
   action :install
 end
 
-if node[:instance_role] != "vagrant"
+if node[:instance_role] == "vagrant"
+  link "/opt/data-api" do
+    to "/opt/workspace/editd-dataservice"
+  end
+else
   include_recipe "misc::ssh"
 
   git "/opt/data-api" do

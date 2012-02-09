@@ -18,6 +18,12 @@
 # limitations under the License.
 #
 
-python_pip "git+git://github.com/sidewinderlabs/pyes.git@85843974b2024b3b638cfdb3702b68d394e3883a#egg=pyes" do
-  action :upgrade
+if node[:instance_role] == "vagrant"
+  link "/usr/local/lib/python2.7/site-packages/pyes" do
+    to "/opt/workspace/sidewinderlabs-pyes/pyes"
+  end
+else
+  python_pip "git+git://github.com/sidewinderlabs/pyes.git@20efb23f8661c9903371c08a8af66435afb35d0e#egg=pyes" do
+    action :upgrade
+  end
 end

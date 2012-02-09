@@ -150,7 +150,7 @@ Vagrant::Config.run do |config|
 
     # Mimic the 'data-api' recipe:
     #
-    s.vm.share_folder("source", "/opt/data-api", "../../editd-dataservice")
+    s.vm.share_folder("source", "/opt/workspace", "../../")
   end
 
   config.vm.define :hadoop_client do |hadoop_client_config|
