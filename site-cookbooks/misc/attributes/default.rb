@@ -13,6 +13,7 @@ set[:elasticsearch][:version] = "0.18.7"
 # set to 2.7.1 so no need to specify it here):
 #
 set['python']['install_method'] = 'source'
+set['python']['version'] = '2.7'
 
 # S O L R
 # =======
