@@ -6,7 +6,7 @@ long_description IO.read(File.join(File.dirname(__FILE__), 'README.rdoc'))
 version          "0.1.0"
 recipe           "misc", "Installs and configures the Sidewinder Labs Platform"
 
-%w{ php apache2 mysql openssl python }.each do |cb|
+%w{ python }.each do |cb|
   depends cb
 end
 

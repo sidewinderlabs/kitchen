@@ -30,19 +30,7 @@
   "recommendations": {
   },
   "dependencies": {
-    "mysql": [
-
-    ],
-    "php": [
-
-    ],
-    "openssl": [
-
-    ],
     "python": [
-
-    ],
-    "apache2": [
 
     ]
   },
