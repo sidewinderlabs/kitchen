@@ -1,0 +1,10 @@
+{
+  "neo4j":{
+    "version","1.4.1",
+    "database_location":"/srv/neo4j/data",
+    "webserver_port":7474,
+    "public_address":"localhost"
+  },
+  "run_list": ["recipe[neo4j]"]
+}
+
