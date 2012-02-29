@@ -38,7 +38,6 @@ else
   git "/opt/data-api" do
     repository "git@github.com:EDITD/dataservice.git"
     reference "master"
-    revision "96eaf7339d3c488e5c2b9eb220fe2cdf6f6cbae0"
     action :sync
   end
 end
