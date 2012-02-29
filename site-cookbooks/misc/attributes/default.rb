@@ -14,6 +14,7 @@ set[:elasticsearch][:version] = "0.18.7"
 #
 set['python']['install_method'] = 'source'
 set['python']['version'] = '2.7'
+set['python']['prefix_dir'] = '/usr'
 
 # S O L R
 # =======
