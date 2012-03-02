@@ -1,12 +1,12 @@
 # The cluster name
-#cluster.name: elasticsearch
+cluster.name: <%= @node[:elasticsearch][:cluster] %>
 
 # Path Settings
 path:
   #conf: /path/to/conf
   #work: /path/to/work
-  logs: /var/log/elasticsearch
-  data: /var/data/elasticsearch
+  logs: <%= @node[:elasticsearch][:logs] %>
+  data: <%= @node[:elasticsearch][:data] %>
 
 # Force all memory to be locked, forcing the JVM to never swap
 #bootstrap.mlockall: true

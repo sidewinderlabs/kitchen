@@ -9,18 +9,18 @@
 # Description:       Starts elasticsearch using start-stop-daemon
 ### END INIT INFO
 
-ES_HOME=/usr/local/elasticsearch
-ES_MIN_MEM=256m
-ES_MAX_MEM=2g
-DAEMON=$ES_HOME/bin/elasticsearch
-NAME=elasticsearch
-DESC=elasticsearch
+ES_HOME=<%= @node[:elasticsearch][:home] %>
+ES_MIN_MEM=<%= @node[:elasticsearch][:min_mem] %>
+ES_MAX_MEM=<%= @node[:elasticsearch][:max_mem] %>
+DAEMON=$ES_HOME/bin/<%= @node[:elasticsearch][:name] %>
+NAME=<%= @node[:elasticsearch][:name] %>
+DESC=<%= @node[:elasticsearch][:name] %>
 PID_FILE=/var/run/$NAME.pid
-LOG_DIR=/var/log/$NAME
-DATA_DIR=/var/lib/$NAME
+LOGS_DIR=<%= @node[:elasticsearch][:logs] %>
+DATA_DIR=<%= @node[:elasticsearch][:data] %>
 WORK_DIR=/tmp/$NAME
-CONFIG_FILE=elasticsearch.yml
-DAEMON_OPTS="-p $PID_FILE -Des.config=$CONFIG_FILE -Des.path.home=$ES_HOME -Des.path.logs=$LOG_DIR -Des.path.data=$DATA_DIR -Des.path.work=$WORK_DIR"
+CONFIG_FILE=<%= @node[:elasticsearch][:name] %>.yml
+DAEMON_OPTS="-p $PID_FILE -Des.config=$CONFIG_FILE -Des.path.home=$ES_HOME -Des.path.work=$WORK_DIR"
 
 
 test -x $DAEMON || exit 0
@@ -30,7 +30,7 @@ set -e
 case "$1" in
   start)
     echo -n "Starting $DESC: "
-    mkdir -p $LOG_DIR $DATA_DIR $WORK_DIR
+    mkdir -p $LOGS_DIR $DATA_DIR $WORK_DIR
     if start-stop-daemon --start --pidfile $PID_FILE --startas $DAEMON -- $DAEMON_OPTS
     then
         echo -e "\E[1;32mstarted"

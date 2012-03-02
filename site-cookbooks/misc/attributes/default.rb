@@ -3,7 +3,20 @@
 # E L A S T I C S E A R C H
 # =========================
 #
+set[:elasticsearch][:name] = "elasticsearch"
 set[:elasticsearch][:version] = "0.18.7"
+set[:elasticsearch][:cluster] = "cluster001"
+set[:elasticsearch][:home] = "/usr/local/elasticsearch"
+set[:elasticsearch][:logs] = "/var/log/elasticsearch"
+set[:elasticsearch][:data] = "/var/opt/elasticsearch"
+
+if node[:instance_role] == "vagrant"
+  set[:elasticsearch][:min_mem] = "1g"
+  set[:elasticsearch][:max_mem] = "1g"
+else
+  set[:elasticsearch][:min_mem] = "12g"
+  set[:elasticsearch][:max_mem] = "12g"
+end
 
 # P Y T H O N
 # ===========
