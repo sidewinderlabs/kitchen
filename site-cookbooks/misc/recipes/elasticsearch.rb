@@ -22,8 +22,8 @@ node[:java][:install_flavor] = "sun"
 
 require_recipe "java"
 
-cookbook_file "/etc/init.d/elasticsearchd" do
-  source "es.init"
+template "/etc/init.d/elasticsearchd" do
+  source "es.init.erb"
   owner "root"
   group "root"
   mode "0700"
@@ -64,8 +64,8 @@ cookbook_file "/etc/security/limits.conf" do
   notifies :restart, resources(:service => "elasticsearchd")
 end
 
-cookbook_file "/usr/local/elasticsearch/config/elasticsearch.yml" do
-  source "elasticsearch.yml"
+template "/usr/local/elasticsearch/config/elasticsearch.yml" do
+  source "elasticsearch.yml.erb"
   notifies :restart, resources(:service => "elasticsearchd")
 end
 
