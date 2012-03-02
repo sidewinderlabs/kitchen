@@ -4,7 +4,7 @@
 # =========================
 #
 set[:elasticsearch][:name] = "elasticsearch"
-set[:elasticsearch][:version] = "0.18.7"
+set[:elasticsearch][:version] = "0.19.0"
 set[:elasticsearch][:cluster] = "cluster001"
 set[:elasticsearch][:home] = "/usr/local/elasticsearch"
 set[:elasticsearch][:logs] = "/var/log/elasticsearch"
