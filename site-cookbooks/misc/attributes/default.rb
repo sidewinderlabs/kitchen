@@ -22,8 +22,9 @@ end
 # ===========
 #
 # The latest version that we can get via package installers is 2.6, so
-# we need to install from source (the cookbook already has the version
-# set to 2.7.1 so no need to specify it here):
+# we need to install from source. Note that the cookbook has the version
+# set to 2.7.1 but that causes Python to be installed even when it already
+# exists:
 #
 set['python']['install_method'] = 'source'
 set['python']['version'] = '2.7'
