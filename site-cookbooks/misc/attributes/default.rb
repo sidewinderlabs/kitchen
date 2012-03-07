@@ -14,8 +14,8 @@ if node[:instance_role] == "vagrant"
   set[:elasticsearch][:min_mem] = "1g"
   set[:elasticsearch][:max_mem] = "1g"
 else
-  set[:elasticsearch][:min_mem] = "12g"
-  set[:elasticsearch][:max_mem] = "12g"
+  set[:elasticsearch][:min_mem] = "8g"
+  set[:elasticsearch][:max_mem] = "8g"
 end
 
 # P Y T H O N
