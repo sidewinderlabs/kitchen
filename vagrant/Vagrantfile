@@ -112,9 +112,6 @@ Vagrant::Config.run do |config|
     s.vm.provision :chef_solo do |chef|
       chef.cookbooks_path = ["../cookbooks", "../site-cookbooks"]
       chef.roles_path = "../roles"
-      chef.add_recipe("apt")
-      chef.add_recipe("git")
-      chef.add_role("data-server")
 
       # Temporary addition of required cookbooks for EC2, since
       # recipes used by roles are not automatically calculated:
@@ -122,6 +119,10 @@ Vagrant::Config.run do |config|
       chef.add_recipe("java")
       chef.add_recipe("python")
       chef.add_recipe("misc")
+
+      chef.add_recipe("apt")
+      chef.add_recipe("git")
+      chef.add_role("data-server")
 
       #this prints out the vagrant config to a `dna.json` file that we
       #can upload to an EC2 instance and use with `chef-solo`.
@@ -169,15 +170,15 @@ Vagrant::Config.run do |config|
       #this prints out the vagrant config to a `dna.json` file that we
       #can upload to an EC2 instance and use with `chef-solo`.
       require 'json'
-      Dir::mkdir('data_server') if not File::directory?('data_server')
-      open('data_server/dna.json', 'w') do |f|
+      Dir::mkdir('django_server') if not File::directory?('django_server')
+      open('django_server/dna.json', 'w') do |f|
         chef.json[:run_list] = chef.run_list
         f.write chef.json.to_json
       end
-      open('data_server/cookbooks_path.json', 'w') do |f|
+      open('django_server/cookbooks_path.json', 'w') do |f|
         f.puts JSON.generate([chef.cookbooks_path].flatten)
       end
-      open('data_server/roles_path.json', 'w') do |f|
+      open('django_server/roles_path.json', 'w') do |f|
         f.puts JSON.generate([chef.roles_path].flatten)
       end
     end
