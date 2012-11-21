@@ -19,6 +19,11 @@
 
 actions :add, :remove
 
+def initialize(*args)
+  super
+  @action = :add
+end
+
 #name of the repo, used for source.list filename
 attribute :repo_name, :kind_of => String, :name_attribute => true
 attribute :uri, :kind_of => String
@@ -28,3 +33,7 @@ attribute :components, :kind_of => Array, :default => []
 attribute :deb_src, :default => false
 attribute :keyserver, :kind_of => String, :default => nil
 attribute :key, :kind_of => String, :default => nil
+attribute :cookbook, :kind_of => String, :default => nil
+#trigger cache rebuild
+#If not you can trigger in the recipe itself after checking the status of resource.updated{_by_last_action}?
+attribute :cache_rebuild, :kind_of => [TrueClass, FalseClass], :default => true
