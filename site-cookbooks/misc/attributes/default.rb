@@ -18,18 +18,6 @@ else
   set[:elasticsearch][:max_mem] = "8g"
 end
 
-# P Y T H O N
-# ===========
-#
-# The latest version that we can get via package installers is 2.6, so
-# we need to install from source. Note that the cookbook has the version
-# set to 2.7.1 but that causes Python to be installed even when it already
-# exists:
-#
-set['python']['install_method'] = 'source'
-set['python']['version'] = '2.7'
-set['python']['prefix_dir'] = '/usr'
-
 # S O L R
 # =======
 #
