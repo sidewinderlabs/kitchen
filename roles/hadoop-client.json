@@ -1,0 +1,25 @@
+{
+  "name": "hadoop-client",
+  "default_attributes": {
+  },
+  "json_class": "Chef::Role",
+  "env_run_lists": {
+  },
+  "run_list": [
+    "role[base]",
+    "recipe[hadoop::pig]",
+    "recipe[hadoop::mrjob]"
+  ],
+  "description": "Hadoop Client.",
+  "chef_type": "role",
+  "override_attributes": {
+    "java": {
+      // The Cloudera distro of Hadoop uses Oracle Java:
+      //
+      "install_flavor": "oracle",
+      "oracle": {
+        "accept_oracle_download_terms": true
+      }
+    }
+  }
+}

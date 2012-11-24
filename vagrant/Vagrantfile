@@ -1,3 +1,6 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
 Vagrant::Config.run do |config|
   # All Vagrant configuration is done here. The most common configuration
   # options are documented and commented below. For a complete reference,
@@ -13,59 +16,64 @@ Vagrant::Config.run do |config|
   # Boot with a GUI so you can see the screen. (Default is headless)
   # config.vm.boot_mode = :gui
 
+  # Assign this VM to a host-only network IP, allowing you to access it
+  # via the IP. Host-only networks can talk to the host machine as well as
+  # any other machines on the same network, but cannot be accessed (through this
+  # network interface) by any external networks.
+  # config.vm.network :hostonly, "192.168.33.10"
+
+  # Assign this VM to a bridged network, allowing you to connect directly to a
+  # network using the host's network device. This makes the VM appear as another
+  # physical device on your network.
+  # config.vm.network :bridged
+
+  # Forward a port from the guest to the host, which allows for outside
+  # computers to access the VM, whereas host only networking does not.
+  # config.vm.forward_port 80, 8080
+
   # Share an additional folder to the guest VM. The first argument is
   # an identifier, the second is the path on the guest to mount the
   # folder, and the third is the path on the host to the actual folder.
-  # config.vm.share_folder "v-data", "/vagrant_data", "../data"
+  config.vm.share_folder "workspace", "/workspace", "~/Documents/workspace"
 
-  # Make our code available to the VM.
-  config.vm.share_folder("source", "/workspace", "../..")
-
-  # Enable provisioning with chef solo, specifying a cookbooks path (relative
-  # to this Vagrantfile), and adding some recipes and/or roles.
+  # Enable provisioning with Puppet stand alone.  Puppet manifests
+  # are contained in a directory path relative to this Vagrantfile.
+  # You will need to create the manifests directory and a manifest in
+  # the file base.pp in the manifests_path directory.
   #
-  # config.vm.provision :chef_solo do |chef|
-  #   chef.cookbooks_path = "cookbooks"
-  #   chef.add_recipe "mysql"
-  #   chef.add_role "web"
+  # An example Puppet manifest to provision the message of the day:
   #
-  #   # You may also specify custom JSON attributes:
-  #   chef.json = { :mysql_password => "foo" }
+  # # group { "puppet":
+  # #   ensure => "present",
+  # # }
+  # #
+  # # File { owner => 0, group => 0, mode => 0644 }
+  # #
+  # # file { '/etc/motd':
+  # #   content => "Welcome to your Vagrant-built virtual machine!
+  # #               Managed by Puppet.\n"
+  # # }
+  #
+  # config.vm.provision :puppet do |puppet|
+  #   puppet.manifests_path = "manifests"
+  #   puppet.manifest_file  = "base.pp"
   # end
+
+  # Enable provisioning with chef solo, specifying a cookbooks path, roles
+  # path, and data_bags path (all relative to this Vagrantfile), and adding 
+  # some recipes and/or roles.
+  #
   config.vm.define :es_server do |es_server|
     es_server.vm.provision :chef_solo do |chef|
       chef.cookbooks_path = ["../cookbooks", "../site-cookbooks"]
       chef.roles_path = "../roles"
-      chef.add_recipe("apt")
-      chef.add_recipe("git")
       chef.add_role("es-server")
-
-      # Temporary addition of required cookbooks for EC2, since
-      # recipes used by roles are not automatically calculated:
-      #
-      chef.add_recipe("java")
-      chef.add_recipe("misc")
-
-      #this prints out the vagrant config to a `dna.json` file that we
-      #can upload to an EC2 instance and use with `chef-solo`.
-      require 'json'
-      Dir::mkdir('es_server') if not File::directory?('es_server')
-      open('es_server/dna.json', 'w') do |f|
-        chef.json[:run_list] = chef.run_list
-        f.write chef.json.to_json
-      end
-      open('es_server/cookbooks_path.json', 'w') do |f|
-        f.puts JSON.generate([chef.cookbooks_path].flatten)
-      end
-      open('es_server/roles_path.json', 'w') do |f|
-        f.puts JSON.generate([chef.roles_path].flatten)
-      end
     end
-	es_server.vm.customize do |vm|
-	  vm.name = "ElasticSearch server"
-	  vm.memory_size = 2048
-	  vm.cpu_count = 2
-	end
+    es_server.vm.customize do |vm|
+      vm.name = "ElasticSearch server"
+      vm.memory_size = 2048
+      vm.cpu_count = 2
+    end
     es_server.vm.network("33.33.33.12")
     es_server.vm.forward_port("ES", 9200, 9200)
   end
@@ -74,132 +82,31 @@ Vagrant::Config.run do |config|
     solr_server.vm.provision :chef_solo do |chef|
       chef.cookbooks_path = ["../cookbooks", "../site-cookbooks"]
       chef.roles_path = "../roles"
-      chef.add_recipe("apt")
-      chef.add_recipe("git")
       chef.add_role("solr-server")
-
-      # Temporary addition of required cookbooks for EC2, since
-      # recipes used by roles are not automatically calculated:
-      #
-      chef.add_recipe("java")
-      chef.add_recipe("misc")
-
-      #this prints out the vagrant config to a `dna.json` file that we
-      #can upload to an EC2 instance and use with `chef-solo`.
-      require 'json'
-      Dir::mkdir('solr_server') if not File::directory?('solr_server')
-      open('solr_server/dna.json', 'w') do |f|
-        chef.json[:run_list] = chef.run_list
-        f.write chef.json.to_json
-      end
-      open('solr_server/cookbooks_path.json', 'w') do |f|
-        f.puts JSON.generate([chef.cookbooks_path].flatten)
-      end
-      open('solr_server/roles_path.json', 'w') do |f|
-        f.puts JSON.generate([chef.roles_path].flatten)
-      end
     end
-	solr_server.vm.customize do |vm|
-	  vm.name = "Solr server"
-	  vm.memory_size = 2048
-	  vm.cpu_count = 2
-	end
+    solr_server.vm.customize do |vm|
+      vm.name = "Solr server"
+      vm.memory_size = 2048
+      vm.cpu_count = 2
+    end
     solr_server.vm.network("33.33.33.13")
     solr_server.vm.forward_port("Solr", 8983, 8983)
-  end
-
-  config.vm.define :data_server do |s|
-    s.vm.provision :chef_solo do |chef|
-      chef.cookbooks_path = ["../cookbooks", "../site-cookbooks"]
-      chef.roles_path = "../roles"
-
-      # Temporary addition of required cookbooks for EC2, since
-      # recipes used by roles are not automatically calculated:
-      #
-      chef.add_recipe("java")
-      chef.add_recipe("python")
-      chef.add_recipe("misc")
-
-      chef.add_recipe("apt")
-      chef.add_recipe("git")
-      chef.add_role("data-server")
-
-      #this prints out the vagrant config to a `dna.json` file that we
-      #can upload to an EC2 instance and use with `chef-solo`.
-      require 'json'
-      Dir::mkdir('data_server') if not File::directory?('data_server')
-      open('data_server/dna.json', 'w') do |f|
-        chef.json[:run_list] = chef.run_list
-        f.write chef.json.to_json
-      end
-      open('data_server/cookbooks_path.json', 'w') do |f|
-        f.puts JSON.generate([chef.cookbooks_path].flatten)
-      end
-      open('data_server/roles_path.json', 'w') do |f|
-        f.puts JSON.generate([chef.roles_path].flatten)
-      end
-    end
-	s.vm.customize do |vm|
-	  vm.name = "Data server"
-	  vm.memory_size = 2048
-	  vm.cpu_count = 2
-	end
-    s.vm.network("33.33.33.14")
-    s.vm.forward_port("django_test", 8000, 8000)
-    s.vm.forward_port("Solr", 8983, 8983)
-    s.vm.forward_port("ES", 9200, 9200)
-
-    # Mimic the 'data-api' recipe:
-    #
-    s.vm.share_folder("source", "/opt/workspace", "../../")
   end
 
   config.vm.define :django_server do |s|
     s.vm.provision :chef_solo do |chef|
       chef.cookbooks_path = ["../cookbooks", "../site-cookbooks"]
       chef.roles_path = "../roles"
-      chef.add_recipe("apt")
-      chef.add_recipe("git")
       chef.add_role("django-server")
-
-      # Temporary addition of required cookbooks for EC2, since
-      # recipes used by roles are not automatically calculated:
-      #
-      chef.add_recipe("misc")
-
-      #this prints out the vagrant config to a `dna.json` file that we
-      #can upload to an EC2 instance and use with `chef-solo`.
-      require 'json'
-      Dir::mkdir('django_server') if not File::directory?('django_server')
-      open('django_server/dna.json', 'w') do |f|
-        chef.json[:run_list] = chef.run_list
-        f.write chef.json.to_json
-      end
-      open('django_server/cookbooks_path.json', 'w') do |f|
-        f.puts JSON.generate([chef.cookbooks_path].flatten)
-      end
-      open('django_server/roles_path.json', 'w') do |f|
-        f.puts JSON.generate([chef.roles_path].flatten)
-      end
     end
     s.vm.forward_port("django", 8000, 8000)
-
-    # Mimic the 'data-api' recipe:
-    #
-    s.vm.share_folder("source", "/opt/workspace", "../../")
   end
 
-  config.vm.define :hadoop_client do |hadoop_client_config|
-    # Make our data available to the VM.
-    hadoop_client_config.vm.share_folder("documents", "/documents", "~/Documents")
-
-    hadoop_client_config.vm.provision :chef_solo do |chef|
+  config.vm.define :hadoop_client do |s|
+    s.vm.provision :chef_solo do |chef|
       chef.cookbooks_path = ["../cookbooks", "../site-cookbooks"]
       chef.roles_path = "../roles"
-      chef.add_recipe("apt")
-      chef.add_recipe("git")
       chef.add_role("hadoop-client")
-
       chef.json.merge!({
         :s3cmd => {
           # Use the user's own keys.
@@ -208,28 +115,15 @@ Vagrant::Config.run do |config|
           :aws_secret_access_key => ENV['AWS_SECRET_ACCESS_KEY']
         }
       })
-
-      # Temporary addition of required cookbooks for EC2, since
-      # recipes used by roles are not automatically calculated:
-      #
-      chef.add_recipe("java")
-      chef.add_recipe("misc")
-
-      #this prints out the vagrant config to a `dna.json` file that we
-      #can upload to an EC2 instance and use with `chef-solo`.
-      require 'json'
-      Dir::mkdir('hadoop_client') if not File::directory?('hadoop_client')
-      open('hadoop_client/dna.json', 'w') do |f|
-        chef.json[:run_list] = chef.run_list
-        f.write chef.json.to_json
-      end
-      open('hadoop_client/cookbooks_path.json', 'w') do |f|
-        f.puts JSON.generate([chef.cookbooks_path].flatten)
-      end
-      open('hadoop_client/roles_path.json', 'w') do |f|
-        f.puts JSON.generate([chef.roles_path].flatten)
-      end
     end
+    s.vm.customize [
+      "modifyvm", :id,
+      "--name", "Hadoop Client",
+      "--memory", 2048
+    ]
+    s.vm.network :hostonly, "33.33.33.10"
+    s.vm.forward_port 8000, 8010
+    s.vm.forward_port 80, 8110
   end
 
   # Enable provisioning with chef server, specifying the chef server URL,
@@ -242,7 +136,7 @@ Vagrant::Config.run do |config|
   # HTTP instead of HTTPS depending on your configuration. Also change the
   # validation key to validation.pem.
   #
-  # config.vm.provision :chef_server do |chef|
+  # config.vm.provision :chef_client do |chef|
   #   chef.chef_server_url = "https://api.opscode.com/organizations/ORGNAME"
   #   chef.validation_key_path = "ORGNAME-validator.pem"
   # end

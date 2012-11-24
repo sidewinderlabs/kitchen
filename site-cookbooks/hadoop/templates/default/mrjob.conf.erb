@@ -1,0 +1,17 @@
+runners:
+  emr:
+    aws_access_key_id: <%= @aws_access_key_id %>
+    aws_secret_access_key: <%= @aws_secret_access_key %>
+    aws_region: eu-west-1
+    s3_endpoint: s3.amazonaws.com
+    emr_endpoint: elasticmapreduce.eu-west-1.amazonaws.com
+    ec2_key_pair: EMR
+    ec2_key_pair_file: ~/.ssh/EMR.pem
+    ssh_tunnel_to_job_tracker: true
+    ami_version: latest
+    bootstrap_cmds:
+    - sudo apt-get install -y python-pip
+    - sudo pip install -U distribute
+    - sudo pip install -U numpy
+    - sudo pip install -U nltk
+    - sudo python -m nltk.downloader -d /usr/share/nltk_data wordnet

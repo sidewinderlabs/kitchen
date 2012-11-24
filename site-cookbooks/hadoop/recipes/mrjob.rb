@@ -20,23 +20,44 @@
 
 require_recipe "python::pip"
 
+if node[:instance_role] == "vagrant"
+  conf_dir = "/home/vagrant"
+  ssh_file = "/home/vagrant/.ssh/EMR.pem"
+  user = "vagrant"
+else
+  conf_dir = "/root"
+  ssh_file = "/root/.ssh/EMR.pem"
+  user = "root"
+end
+
+python_pip "boto" do
+  action :install
+end
+
+template "#{conf_dir}/.boto" do
+  owner user
+  source "boto.conf.erb"
+  variables(
+    :aws_access_key_id => node[:s3cmd][:aws_access_key_id],
+    :aws_secret_access_key => node[:s3cmd][:aws_secret_access_key]
+  )
+end
+
 python_pip "mrjob" do
   action :install
 end
 
-if node[:instance_role] == "vagrant"
-  t = "/home/vagrant/.mrjob"
-  o = "vagrant"
-else
-  t = "/root/.mrjob"
-  o = "root"
-end
-
-template t do
-  owner o
+template "#{conf_dir}/.mrjob.conf" do
+  owner user
   source "mrjob.conf.erb"
   variables(
     :aws_access_key_id => node[:s3cmd][:aws_access_key_id],
     :aws_secret_access_key => node[:s3cmd][:aws_secret_access_key]
   )
+end
+
+cookbook_file ssh_file do
+  source "EMR.pem"
+  owner user
+  mode "0600"
 end

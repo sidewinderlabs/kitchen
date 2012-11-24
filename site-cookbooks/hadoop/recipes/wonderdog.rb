@@ -1,7 +1,7 @@
 #
 # Author:: Mark Birbeck (mark.birbeck@sidewinderlabs.com)
-# Cookbook Name:: misc
-# Recipe:: data-api
+# Cookbook Name:: hadoop
+# Recipe:: mrjob
 #
 # Copyright 2011, Sidewinder Labs Ltd.
 #
@@ -18,26 +18,10 @@
 # limitations under the License.
 #
 
-include_recipe "misc::django"
-include_recipe "misc::pyes"
-include_recipe "misc::requests"
-include_recipe "misc::djangorestframework"
+require_recipe "elasticsearch"
 
-python_pip "python-dateutil" do
-  version "1.5"
-  action :install
-end
-
-if node[:instance_role] == "vagrant"
-  link "/opt/data-api" do
-    to "/opt/workspace/editd-dataservice"
-  end
-else
-  include_recipe "misc::ssh"
-
-  git "/opt/data-api" do
-    repository "git@github.com:EDITD/dataservice.git"
-    reference "master"
-    action :sync
-  end
+git "/usr/local/share/wonderdog" do
+  repository "https://github.com/infochimps-labs/wonderdog.git"
+  reference "master"
+  action :sync
 end
