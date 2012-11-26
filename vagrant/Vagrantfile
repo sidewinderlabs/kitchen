@@ -63,34 +63,32 @@ Vagrant::Config.run do |config|
   # path, and data_bags path (all relative to this Vagrantfile), and adding 
   # some recipes and/or roles.
   #
-  config.vm.define :es_server do |es_server|
-    es_server.vm.provision :chef_solo do |chef|
+  config.vm.define :elasticsearch_server do |s|
+    s.vm.provision :chef_solo do |chef|
       chef.cookbooks_path = ["../cookbooks", "../site-cookbooks"]
       chef.roles_path = "../roles"
       chef.add_role("es-server")
     end
-    es_server.vm.customize do |vm|
-      vm.name = "ElasticSearch server"
-      vm.memory_size = 2048
-      vm.cpu_count = 2
-    end
-    es_server.vm.network("33.33.33.12")
-    es_server.vm.forward_port("ES", 9200, 9200)
+    s.vm.customize [
+      "modifyvm", :id,
+      "--name", "ElasticSearch Server"
+    ]
+    s.vm.network :hostonly, "33.33.33.12"
+    s.vm.forward_port 9200, 9200
   end
 
-  config.vm.define :solr_server do |solr_server|
-    solr_server.vm.provision :chef_solo do |chef|
+  config.vm.define :solr_server do |s|
+    s.vm.provision :chef_solo do |chef|
       chef.cookbooks_path = ["../cookbooks", "../site-cookbooks"]
       chef.roles_path = "../roles"
       chef.add_role("solr-server")
     end
-    solr_server.vm.customize do |vm|
-      vm.name = "Solr server"
-      vm.memory_size = 2048
-      vm.cpu_count = 2
-    end
-    solr_server.vm.network("33.33.33.13")
-    solr_server.vm.forward_port("Solr", 8983, 8983)
+    s.vm.customize [
+      "modifyvm", :id,
+      "--name", "Solr Server"
+    ]
+    s.vm.network :hostonly, "33.33.33.13"
+    s.vm.forward_port 8983, 8983
   end
 
   config.vm.define :django_server do |s|
@@ -99,7 +97,11 @@ Vagrant::Config.run do |config|
       chef.roles_path = "../roles"
       chef.add_role("django-server")
     end
-    s.vm.forward_port("django", 8000, 8000)
+    s.vm.customize [
+      "modifyvm", :id,
+      "--name", "Django Server"
+    ]
+    s.vm.forward_port 8000, 8000
   end
 
   config.vm.define :hadoop_client do |s|
